@@ -1,0 +1,43 @@
+ <!-- Standalone file for replying to a message in na Issue --> 
+
+{{> header}}
+<body>
+
+{{> navbar}}
+
+<div class="container-fluid text-center">    
+  <div class="row content">
+
+    <div class="col-sm-2 sidenav">
+    {{> sidenav}}
+    </div>
+
+    <div class="col-sm-4 text-left">
+
+    <form name="input" action="/new_reply_handler" method="post">
+    
+    <div class="row">
+        <div class="col-*-*"> <h4> Reply to Message </h4> </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-*-*"><input maxlength="64" size="64" type="text" name="subject" placeholder="Subject" required></div>
+    </div> 
+
+    <div class="row">
+        <div class="col-*-*"><textarea required maxlength="2048" type="text" name="message" rows="8" cols="69"></textarea></div>
+    </div>
+    <div class="row">
+        <div class="col-*-*"><input type="hidden" type="readonly" maxlength="40" type="text" name="message_id" value="{{message_id}}"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-*-*">
+        <button type="submit" class="btn btn-primary btn-block">Send</button>
+        </div>
+    </div>
+    </form>
+    
+  </div>
+</div>
+</body>

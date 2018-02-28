@@ -1,0 +1,48 @@
+<div class="container">
+    
+  <form name="input" action="/new_message_handler" method="post">
+  
+  <div class="row">
+    <div class="col-*-*"> <h4> Reply to Issue </h4> </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-*-*"><input  required maxlength="64"  type="text" name="subject"  size="69"  placeholder="Subject"></div>
+  </div> 
+  <div class="row">
+    <div class="col-*-*"><textarea required maxlength="2048" type="text" name="message" rows="8" cols="69" placeholder="Message"></textarea></div>
+  </div>
+<!--
+  <div class="container">
+    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Add Tags</button>
+    <div id="demo" class="collapse">
+    <div class="row">
+      <div class="col-*-*"><input maxlength="32" type="text" name="name" placeholder="Reference"></div>
+    </div> 
+    <div class="row">
+      <div class="col-*-*"><input maxlength="32" type="text" name="email" placeholder=""></div>    
+    </div>
+    </div>
+  </div>
+-->
+
+<!-- This has to be fixed either prerender it with handlebars (nice solution), 
+or insert it into the to be assembled end .hbs file (ugly solution)-->
+  <div class="row">
+    <div class="col-*-*"><input type="hidden" type="readonly" maxlength="40" type="text" name="target" value="{{issue.id}}"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-*-*">
+      <button type="submit" class="btn btn-primary btn-block">Send</button>
+  	</div>
+  </div>
+  </form> 
+
+  <div class="row">
+    <div class="col-*-*">
+      <input type="submit" value="Send" />
+  	</div>
+  </div>
+  </form> 
+</div>

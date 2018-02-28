@@ -1,0 +1,4 @@
+In the this directory the files for the to be asssembled lists are stored.
+Unlike in the other templates folder these files combine previously defined Elements to one Html Structure.
+The defined Elements are taken as a whole from files. 
+For example the Content defined in ../forms/reply.hbs is at compile time inserted into the show_issue.hbs list file.

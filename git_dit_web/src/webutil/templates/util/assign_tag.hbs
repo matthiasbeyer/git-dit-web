@@ -1,0 +1,60 @@
+<!--
+      <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Assign to Category
+      <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <form action="/new_cat_tag_handler/new/{{id}}" method="POST">
+            <button  value="new" type="submit"> New </button>
+          </form>
+
+          <form action="/new_cat_tag_handler/critical/{{id}}" method="POST">
+            <button value="critical" type="submit"> Critical </button>
+          </form>
+
+          <form action="/new_cat_tag_handler/trivial/{{id}}" method="POST">
+            <button value="trivial" type="submit"> Trivial </button>
+          </form>
+
+          <form action="/new_cat_tag_handler/subscribed/{{id}}" method="POST">
+            <button value="subscribed" type="subscribed"></button>
+          </form>
+
+          <form action="/new_cat_tag_handler/deleted/{{id}}" method="POST">
+            <button value="deleted" type="deleted"></button>
+          </form>
+        </ul>
+        </div>
+
+
+                           <div class="container">
+                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Add Tags</button>
+                <div id="demo" class="collapse">
+                  <div class="row">
+                    <div class="col-*-*"><input maxlength="32" type="text" name="name" placeholder="Reference"></div>
+                  </div> 
+                  <div class="row">
+                    <div class="col-*-*"><input maxlength="32" type="text" name="email" placeholder=""></div>    
+                  </div>
+                </div>
+              </div>
+-->
+
+
+<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#assign">Assign to Category</button>
+<div id="assign" class="collapse">
+    <form action="/new_cat_tag_handler/new/{{id}}" method="POST">
+      <button  value="new" type="submit"> New </button>
+    </form>
+     <form action="/new_cat_tag_handler/critical/{{id}}" method="POST">
+      <button value="critical" type="submit"> Critical </button>
+    </form>
+     <form action="/new_cat_tag_handler/trivial/{{id}}" method="POST">
+      <button value="trivial" type="submit"> Trivial </button>
+    </form>
+     <form action="/new_cat_tag_handler/subscribed/{{id}}" method="POST">
+      <button value="subscribed" type="subscribed"> Subscribe </button>
+    </form>
+     <form action="/new_cat_tag_handler/deleted/{{id}}" method="POST">
+      <button value="deleted" type="deleted"> Delete </button>
+    </form>
+</div>

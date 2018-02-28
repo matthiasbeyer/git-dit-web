@@ -1,0 +1,139 @@
+{{> header}}
+<body>
+
+{{> navbar}}
+
+<div class="container-fluid text-center">    
+  <div class="row content">
+
+    <div class="col-sm-2 sidenav">
+    {{> sidenav}}
+    </div>
+
+    <div class="col-sm-4 text-left">
+
+    <!-- BEGIN UGLY -->
+
+  <form name="input" action="/new_message_handler" method="post">
+  
+  <div class="row">
+    <div class="col-*-*"> <h4> Reply to Issue </h4> </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-*-*"><input  required maxlength="64"  type="text" name="subject"  size="69"  placeholder="Subject"></div>
+  </div> 
+  <div class="row">
+    <div class="col-*-*"><textarea required maxlength="2048" type="text" name="message" rows="8" cols="69" placeholder="Message"></textarea></div>
+  </div>
+
+
+<!-- This has to be fixed either prerender it with handlebars (nice solution), 
+or insert it into the to be assembled end .hbs file (ugly solution)-->
+  <div class="row">
+    <div class="col-*-*"><input type="hidden" type="readonly" maxlength="40" type="text" name="target" value="{{issue.id}}"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-*-*">
+      <button type="submit" class="btn btn-primary btn-block">Send</button>
+  	</div>
+  </div>
+  </form> 
+
+
+    <!-- END UGLY -->
+
+  <!-- BEGIN UTIL LINKS -->
+  <div class="row">
+    <h5>Showing Messages of Issue {{issue.id}}</h5>
+  </div>
+
+    <div class="table-condensed-striped">   
+        <table class="table">            
+          <tr>
+            <td> <a href="/show_issue/{{issue.id}}/oldest_first">Oldest first</a> </td>
+            <td> <a href="/show_issue/{{issue.id}}/newest_first">Newest first</a> </td>
+            <td> <a href="/delete_issue/{{issue.id}}">Delete Issue</a> </td>
+
+            </tr>
+            <tr>
+            <td> {{> assign}}</td>
+              <td>  
+                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#addTags">Add Tags</button>
+                <div id="addTags" class="collapse">
+                  <div class="row">
+                    <div class="col-*-*"><input maxlength="32" type="text" name="name" placeholder="Reference"></div>
+                  </div> 
+                  <div class="row">
+                    <div class="col-*-*"><input maxlength="32" type="text" name="email" placeholder=""></div>    
+                  </div>
+              </div>
+            </td>
+          </tr>                       
+        </table>
+    </div>
+  <!-- END UTIL LINKS --> 
+
+
+    <div id="jstree">
+        <ul>
+        {{issue.id}}
+        
+        {{#each issue.messages}}
+            <li data-jstree='{ "opened" : true , "icon" : ">"}'>
+            <span class="message-subject"> {{subject}} </span> 
+                <ul>
+                    {{#each message_body}}
+                    <li data-jstree='{ "opened" : true , "icon" : "_" }'> 
+                        {{message}}   
+                    </li>
+                    {{/each}}
+
+                    <li data-jstree='{ "opened" : true , "icon" : "_" }'> 
+                      <span class="delete-message"><a href="/delete_message/{{hash_id}}">Delete </a> </span>                    
+                      <span class="alter-message"> <a href="/alter_message/{{hash_id}}">Edit </a> </span>
+                      <span class="reply-message"> <a href="/reply_message/{{hash_id}}"> Reply </a> </span> 
+                      <!-- <span class="reply-message"> <a href="/reply_message/{{hash_id}}">Reply </a> </span> --> 
+
+                      <span class="message-head-information">{{head}} </span> 
+                    </li>
+                </ul>
+            </li>
+        {{/each}}
+        </ul>
+        </div>
+
+              <!-- "core" : { "initially_open" : [ "phtml_1" ] } 
+              
+              .on("activate_node.jstree", function(e,data){
+                window.location.href = data.node.a_attr.href;
+              });
+              -->
+        <script>
+            $(function() {
+            $('#jstree').jstree(
+            )
+              .bind("select_node.jstree", function (e, data) {
+                  $('#jstree').jstree('save_state');
+              })
+              .on("activate_node.jstree", function(e,data){
+                window.location.href = data.node.a_attr.href;
+              })
+            });
+        </script>
+
+    </div>
+
+    <!--
+    <div class="col-sm-4 text-left">
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+    </div>
+    -->
+    
+  </div>
+</div>
+</body>

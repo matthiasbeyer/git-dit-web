@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>git dit web</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="/assets/bootstrap/favicon.ico">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/format.css">
+
+<!-- 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/assets/bootstrap/dist/css/bootstrap.css">
+        <script src="/assets/bootstrap/assets/js/vendor/jquery-slim.min.js"></script>
+        <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>  
+-->
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="#"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#"></a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Hello again </a></li>
+                <li><a href="#">Hello again </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <!-- 
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                -->
+            </ul>
+            </div>
+        </div>
+        </nav>
+        <div class="col-sm-2 sidenav">
+        <p> List Issue Category </p>
+        <p><a href="/get_tagged_issues/new">new</a></p>
+        <p><a href="/get_tagged_issues/critical">critical</a></p>
+        <p><a href="/get_tagged_issues/trivial">trivial</a></p>
+        <p><a href="/get_tagged_issues/subscribed">subscribed</a></p>
+        <!-- a resolved and eventually a low and high priority category would be usefull -->
+        </div>
+        {{~> page}}
+    </body>
+    <footer>
+        
+    </footer>
+</html>

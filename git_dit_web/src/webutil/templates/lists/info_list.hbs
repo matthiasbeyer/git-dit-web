@@ -1,0 +1,26 @@
+{{> header}}
+<body>
+{{> navbar}}
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+    {{> sidenav}}
+    </div>
+    <div class="col-sm-6 text-left">
+        <div id="container">
+            <h4>Git config for workdir {{ git_entries.filename }} </h4> 
+            <div class="table-condensed-striped">   
+                <table class="table">
+                    {{#each git_entries.all_entries }}
+                        <tr>
+                            <td> {{name}} </td>
+                            <td> {{value}} </td>
+                        </tr>                          
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+</body>
