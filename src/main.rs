@@ -1,26 +1,28 @@
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_derive;
 
-extern crate iron;
-extern crate params;
-extern crate urlencoded;
-extern crate router;
-extern crate libgitdit;
-extern crate git2;
 extern crate chrono;
+extern crate clap;
 extern crate docopt;
-extern crate regex;
-extern crate mount;
 extern crate env_logger;
+extern crate git2;
 extern crate handlebars_iron as hbs;
-extern crate time;
+extern crate iron;
+extern crate libgitdit;
+extern crate mount;
+extern crate params;
+extern crate regex;
+extern crate router;
 extern crate serde;
 extern crate serde_json;
 extern crate staticfile;
-extern crate clap;
+extern crate time;
+extern crate urlencoded;
 
-use hbs::{HandlebarsEngine, DirectorySource};
-use hbs::handlebars::{Handlebars, RenderContext, RenderError, Helper};
+use hbs::{DirectorySource, HandlebarsEngine};
+use hbs::handlebars::{Handlebars, Helper, RenderContext, RenderError};
 use iron::Iron;
 use iron::middleware::Chain;
 use router::Router;
@@ -31,15 +33,16 @@ mod system;
 //use gitext::RemotePriorization;
 //mod filters;
 
-use std::io::{self};
+use std::io;
 use std::io::Write;
 use log::LogLevel;
 use std::path::Path;
 
-#[macro_use] mod webutil;
+#[macro_use]
+mod webutil;
 
 use webutil::iron_handlers::*;
-use webutil::git_info::*;   
+use webutil::git_info::*;
 
 fn main() {
     if let Err(err) = system::Logger::init(LogLevel::Warn) {
@@ -54,19 +57,23 @@ fn main() {
         panic!("{}", r);
     }
 
-   hbse.handlebars_mut().register_helper("some_helper",
-                                          Box::new(|_: &Helper,
-                                                    _: &Handlebars,
-                                                    _: &mut RenderContext|
-                                                    -> Result<(), RenderError> {
-                                                       Ok(())
-                                                   }));                                                   
+    hbse.handlebars_mut().register_helper(
+        "some_helper",
+        Box::new(
+            |_: &Helper, _: &Handlebars, _: &mut RenderContext| -> Result<(), RenderError> {
+                Ok(())
+            },
+        ),
+    );
 
     let mut router = Router::new();
-  
-    
+
+
     hbse.handlebars_mut()
-        .register_template_file("header", &Path::new("./src/webutil/templates/base_templates/header.hbs"))
+        .register_template_file(
+            "header",
+            &Path::new("./src/webutil/templates/base_templates/header.hbs"),
+        )
         .ok()
         .unwrap();
     hbse.handlebars_mut()
@@ -74,19 +81,31 @@ fn main() {
         .ok()
         .unwrap();
     hbse.handlebars_mut()
-        .register_template_file("sidenav", "./src/webutil/templates/base_templates/sidenav.hbs")
+        .register_template_file(
+            "sidenav",
+            "./src/webutil/templates/base_templates/sidenav.hbs",
+        )
         .ok()
         .unwrap();
     hbse.handlebars_mut()
-        .register_template_file("submitIssue", "./src/webutil/templates/forms/submitIssue.hbs")
+        .register_template_file(
+            "submitIssue",
+            "./src/webutil/templates/forms/submitIssue.hbs",
+        )
         .ok()
         .unwrap();
     hbse.handlebars_mut()
-        .register_template_file("submitMessage", "./src/webutil/templates/forms/submitMessage.hbs")
+        .register_template_file(
+            "submitMessage",
+            "./src/webutil/templates/forms/submitMessage.hbs",
+        )
         .ok()
         .unwrap();
     hbse.handlebars_mut()
-        .register_template_file("navbar", "./src/webutil/templates/base_templates/navbar.hbs")
+        .register_template_file(
+            "navbar",
+            "./src/webutil/templates/base_templates/navbar.hbs",
+        )
         .ok()
         .unwrap();
     hbse.handlebars_mut()
@@ -98,24 +117,40 @@ fn main() {
     // For a description of what each route does, look at
     router.get("/", index, "index");
     router.get("/show_issue/:message_id/:order", show_issue, "show_issue");
-    router.post("/new_cat_tag_handler/:tag/:target", new_cat_tag_handler, "new_cat_tag_handler");
+    router.post(
+        "/new_cat_tag_handler/:tag/:target",
+        new_cat_tag_handler,
+        "new_cat_tag_handler",
+    );
     router.get("/list_handler", list_handler, "list_handler");
     router.get("/get_info", get_info_handler, "get_info_handler");
-    router.get("/get_tagged_issues/:tag", get_tagged_issues, "get_tagged_issues");
+    router.get(
+        "/get_tagged_issues/:tag",
+        get_tagged_issues,
+        "get_tagged_issues",
+    );
     router.get("/local_issues", local_issues_handler, "local_issues");
     router.get("/remote_issues", remote_issues_handler, "remote_issues");
 
-    router.get("/reply_message/:message_id", reply_message_handler, "reply_message_handler");
+    router.get(
+        "/reply_message/:message_id",
+        reply_message_handler,
+        "reply_message_handler",
+    );
 
-    // Every function with a Messagebody is trasnmitted 
+    // Every function with a Messagebody is trasnmitted
     router.post("new_reply_handler", new_reply_handler, "new_reply_handler");
-    router.post("new_message_handler", new_message_handler, "new_message_handler");
+    router.post(
+        "new_message_handler",
+        new_message_handler,
+        "new_message_handler",
+    );
     router.post("new_issue_handler", new_issue_handler, "new_issue_handler");
 
     //just for fun to expirement with stuff
     let mut mount = Mount::new();
     mount.mount("/", router);
-    
+
     //Is there to load css js html doesen't quiet work yet but a fix is only of "cosmetical" priority for now
     mount.mount("/assets/", Static::new(Path::new("src/webutil/templates/")));
 

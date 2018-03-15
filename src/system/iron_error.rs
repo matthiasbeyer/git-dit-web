@@ -1,5 +1,5 @@
 use iron::prelude::*;
-use iron::{Handler, BeforeMiddleware};
+use iron::{BeforeMiddleware, Handler};
 use iron::status;
 
 use std::error::Error;

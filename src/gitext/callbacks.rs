@@ -18,7 +18,11 @@ use error::LoggableError;
 /// Get credentials from the user
 ///
 #[allow(unused)]
-fn get_creds(url: &str, username: Option<&str>, types: git2::CredentialType) -> RResult<Cred, git2::Error> {
+fn get_creds(
+    url: &str,
+    username: Option<&str>,
+    types: git2::CredentialType,
+) -> RResult<Cred, git2::Error> {
     // TODO: implement other authentication methods
     if types.contains(git2::SSH_KEY) {
         if let Some(user) = username {
@@ -36,9 +40,10 @@ fn print_sideband(data: &[u8]) -> bool {
     // We don't consider output errors critical for sideband data.
     match str::from_utf8(data) {
         Ok(string) => write!(stderr, "remote: {}", string)
-                        .and_then(|_| stderr.flush())
-                        .ok().unwrap(),
-        Err(e) => e.log()
+            .and_then(|_| stderr.flush())
+            .ok()
+            .unwrap(),
+        Err(e) => e.log(),
     }
     true
 }
@@ -49,8 +54,8 @@ fn print_sideband(data: &[u8]) -> bool {
 fn print_tip_updates(refname: &str, old: git2::Oid, new: git2::Oid) -> bool {
     match (old.is_zero(), new.is_zero()) {
         (false, false) => println!("[changed]:  {}", refname),
-        (true,  false) => println!("[new]:      {}", refname),
-        (false, true ) => println!("[deleted]:  {}", refname),
+        (true, false) => println!("[new]:      {}", refname),
+        (false, true) => println!("[deleted]:  {}", refname),
         _ => {}
     }
     true
@@ -61,7 +66,7 @@ fn print_tip_updates(refname: &str, old: git2::Oid, new: git2::Oid) -> bool {
 ///
 fn print_push_ref_updates(refname: &str, failmsg: Option<&str>) -> RResult<(), git2::Error> {
     match failmsg {
-        None      => println!("[updated]:  {}", refname),
+        None => println!("[updated]:  {}", refname),
         Some(msg) => println!("[error]:    {} ({})", refname, msg),
     };
     Ok(())
@@ -78,4 +83,3 @@ pub fn callbacks() -> git2::RemoteCallbacks<'static> {
     retval.push_update_reference(print_push_ref_updates);
     retval
 }
-

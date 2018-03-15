@@ -27,15 +27,14 @@ pub trait LinesExt: Sized {
 }
 
 impl<I, L> LinesExt for I
-    where I: IntoIterator<Item = L>,
-          L: Display
+where
+    I: IntoIterator<Item = L>,
+    L: Display,
 {
-    fn write_lines(self, stream: &mut Write) -> RResult<()>
-    {
+    fn write_lines(self, stream: &mut Write) -> RResult<()> {
         for line in self {
             write!(stream, "{}\n", line)?;
         }
         Ok(())
     }
 }
-

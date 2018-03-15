@@ -44,4 +44,3 @@ impl log::Log for Logger {
         }
     }
 }
-

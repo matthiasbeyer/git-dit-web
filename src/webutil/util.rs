@@ -6,15 +6,15 @@ use libgitdit::trailer::Trailer;
 use libgitdit::{Issue, RepositoryExt};
 
 use system::abort::Abortable;
- 
+
 // Opens local git repo
 pub fn open_dit_repo() -> Repository {
     // TODO: access the config and maybe return another repo instead
     Repository::open_from_env().unwrap_or_abort()
 }
 
-pub fn get_base_url() -> String{
-   "http://localhost:3000/".to_string()
+pub fn get_base_url() -> String {
+    "http://localhost:3000/".to_string()
 }
 
 pub trait RepositoryUtil<'r> {
@@ -24,7 +24,7 @@ pub trait RepositoryUtil<'r> {
 }
 
 impl<'r> RepositoryUtil<'r> for Repository {
-     fn prepare_trailers(&self, matches: &ArgMatches) -> Vec<Trailer> {
+    fn prepare_trailers(&self, matches: &ArgMatches) -> Vec<Trailer> {
         let mut trailers = Vec::new();
 
         if matches.is_present("signoff") {

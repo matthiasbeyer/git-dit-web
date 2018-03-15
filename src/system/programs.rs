@@ -48,21 +48,21 @@ impl<'a> Var<'a> {
 /// the program, or returns an error containing the name provided.
 ///
 fn command(name: &str, prefs: &[Var], config: &Config) -> Result<Command> {
-    prefs.into_iter()
-         .filter_map(|var| {
-             var.value(config)
-                 .and_then(|s| {
-                    let mut strs = s.split_whitespace();
-                     if let Some(mut command) = strs.next().map(Command::new) {
-                         command.args(strs);
-                         Some(command)
-                    } else {
-                        None
-                    }
-                 })
-         })
-         .next()
-         .ok_or_else(|| Error::from(EK::ProgramError(name.to_owned())))
+    prefs
+        .into_iter()
+        .filter_map(|var| {
+            var.value(config).and_then(|s| {
+                let mut strs = s.split_whitespace();
+                if let Some(mut command) = strs.next().map(Command::new) {
+                    command.args(strs);
+                    Some(command)
+                } else {
+                    None
+                }
+            })
+        })
+        .next()
+        .ok_or_else(|| Error::from(EK::ProgramError(name.to_owned())))
 }
 
 
@@ -77,11 +77,12 @@ pub fn run_editor(config: Config, path: &PathBuf) -> Result<Child> {
         Var::GitConf("core.editor"),
         Var::Environ("VISUAL"),
         Var::Environ("EDITOR"),
-        Var::Default("vi") // TODO: make settable at compile time
+        Var::Default("vi"), // TODO: make settable at compile time
     ];
     command("editor", &prefs, &config)?
         .arg(path.as_os_str())
-        .spawn().chain_err(|| EK::WrappedIOError)
+        .spawn()
+        .chain_err(|| EK::WrappedIOError)
 }
 
 
@@ -96,11 +97,10 @@ pub fn pager(config: Config) -> Result<Child> {
         Var::Environ("GIT_PAGER"),
         Var::GitConf("core.pager"),
         Var::Environ("PAGER"),
-        Var::Default("less") // TODO: make settable at compile time
+        Var::Default("less"), // TODO: make settable at compile time
     ];
-    command("pager", &prefs, &config)
-        .and_then(|mut command| {
-            command.stdin(Stdio::piped());
-            command.spawn().chain_err(|| EK::WrappedIOError)
-        })
+    command("pager", &prefs, &config).and_then(|mut command| {
+        command.stdin(Stdio::piped());
+        command.spawn().chain_err(|| EK::WrappedIOError)
+    })
 }

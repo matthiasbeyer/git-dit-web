@@ -9,13 +9,13 @@
 
 use libgitdit::Issue;
 use libgitdit::trailer::filter::{TrailerFilter, ValueMatcher};
-use libgitdit::trailer::{TrailerValue, spec};
-use regex::{Regex, Match};
+use libgitdit::trailer::{spec, TrailerValue};
+use regex::{Match, Regex};
 use std::str::FromStr;
 
 use error::*;
 use error::ErrorKind as EK;
-use gitext::{RemotePriorization, ReferrencesExt};
+use gitext::{ReferrencesExt, RemotePriorization};
 use system::{Abortable, IteratorExt};
 
 
@@ -39,7 +39,7 @@ impl NonTrailer {
                     .map(TrailerValue::from_slice)
                     .unwrap_or_default();
                 Ok(value)
-            },
+            }
             &NonTrailer::ReporterEMail => {
                 let initial = issue.initial_message()?;
                 let value = initial
@@ -48,7 +48,7 @@ impl NonTrailer {
                     .map(TrailerValue::from_slice)
                     .unwrap_or_default();
                 Ok(value)
-            },
+            }
         }
     }
 }
@@ -86,8 +86,7 @@ impl FromStr for FilterSpec {
             static ref RE: Regex = Regex::new(r"^(!)?([[:alnum:]-]+)((=|~)(.*))?$").unwrap();
         }
 
-        let parts = RE
-            .captures(s)
+        let parts = RE.captures(s)
             .ok_or_else(|| Error::from_kind(EK::MalformedFilterSpec(s.to_owned())))?;
 
         let key = parts
@@ -112,7 +111,7 @@ impl FromStr for FilterSpec {
             match op {
                 "=" => ValueMatcher::Equals(TrailerValue::from_slice(value)),
                 "~" => ValueMatcher::Contains(value.to_string()),
-                _   => return Err(Error::from_kind(EK::MalformedFilterSpec(s.to_owned()))),
+                _ => return Err(Error::from_kind(EK::MalformedFilterSpec(s.to_owned()))),
             }
         } else {
             ValueMatcher::Any
@@ -121,7 +120,7 @@ impl FromStr for FilterSpec {
         Ok(FilterSpec {
             key: key.to_string(),
             matcher: matcher,
-            negated: parts.get(1).is_some()
+            negated: parts.get(1).is_some(),
         })
     }
 }
@@ -139,22 +138,27 @@ impl<'a> MetadataFilter<'a> {
     /// Create a new metadata filter
     ///
     pub fn new<I>(prios: &'a RemotePriorization, spec: I) -> Result<Self>
-        where I: IntoIterator<Item = FilterSpec>
+    where
+        I: IntoIterator<Item = FilterSpec>,
     {
         let mut nontrailers = Vec::new();
         let mut trailers = Vec::new();
 
         for s in spec.into_iter() {
             match s.key.as_ref() {
-                "status"            => trailers.push(s.into_trailer(spec::ISSUE_STATUS_SPEC.clone())),
-                "type"              => trailers.push(s.into_trailer(spec::ISSUE_TYPE_SPEC.clone())),
-                "reporter-name"     => nontrailers.push(s.into_nontrailer(NonTrailer::ReporterName)),
-                "reporter-email"    => nontrailers.push(s.into_nontrailer(NonTrailer::ReporterEMail)),
-                _                   => return Err(Error::from_kind(EK::UnknownMetadataKey(s.key.to_string()))),
+                "status" => trailers.push(s.into_trailer(spec::ISSUE_STATUS_SPEC.clone())),
+                "type" => trailers.push(s.into_trailer(spec::ISSUE_TYPE_SPEC.clone())),
+                "reporter-name" => nontrailers.push(s.into_nontrailer(NonTrailer::ReporterName)),
+                "reporter-email" => nontrailers.push(s.into_nontrailer(NonTrailer::ReporterEMail)),
+                _ => return Err(Error::from_kind(EK::UnknownMetadataKey(s.key.to_string()))),
             }
         }
 
-        Ok(MetadataFilter { prios: prios, nontrailers: nontrailers, trailers: trailers })
+        Ok(MetadataFilter {
+            prios: prios,
+            nontrailers: nontrailers,
+            trailers: trailers,
+        })
     }
 
     /// Create an empty metadata filter
@@ -200,8 +204,7 @@ impl<'a> MetadataFilter<'a> {
             .map(|head| head.peel(ObjectType::Commit).unwrap_or_abort().id());
 
         // Accumulate all the metadata we care about
-        let acc: HashMap<_, _> = head
-            .into_iter()
+        let acc: HashMap<_, _> = head.into_iter()
             .flat_map(|head| issue.messages_from(head).abort_on_err())
             .accumulate_trailers(self.trailers.iter().map(|i| i.0.spec()));
 
@@ -211,4 +214,3 @@ impl<'a> MetadataFilter<'a> {
             .all(|spec| spec.0.matches(&acc) ^ spec.1)
     }
 }
-

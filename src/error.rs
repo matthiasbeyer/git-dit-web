@@ -19,7 +19,8 @@ pub trait LoggableError {
 }
 
 impl<E> LoggableError for E
-    where E: EError
+where
+    E: EError,
 {
     fn log(&self) {
         let mut current = Some(self as &EError);
@@ -29,4 +30,3 @@ impl<E> LoggableError for E
         }
     }
 }
-

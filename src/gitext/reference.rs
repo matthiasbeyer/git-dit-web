@@ -29,10 +29,10 @@ impl<'r> ReferrenceExt for Reference<'r> {
             let mut name_parts = name.split('/');
 
             if !is_match!(name_parts.next(), Some("refs")) {
-                return None
+                return None;
             }
             if !is_match!(name_parts.next(), Some("remotes")) {
-                return None
+                return None;
             }
             name_parts.next()
         } else {
@@ -93,14 +93,16 @@ pub trait ReferrencesExt<'r> {
 }
 
 impl<'r, I> ReferrencesExt<'r> for I
-    where I: IntoIterator<Item = Reference<'r>>,
+where
+    I: IntoIterator<Item = Reference<'r>>,
 {
     fn select_ref(self, prios: &RemotePriorization) -> Option<Reference<'r>> {
         self.into_iter()
-            .filter_map(|reference| prios
-                .priority_for_ref(reference.borrow())
-                .map(|prio| (reference, prio))
-            )
+            .filter_map(|reference| {
+                prios
+                    .priority_for_ref(reference.borrow())
+                    .map(|prio| (reference, prio))
+            })
             .min_by_key(|item| item.1)
             .map(|item| item.0)
     }
