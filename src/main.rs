@@ -11,7 +11,6 @@ extern crate handlebars_iron as hbs;
 extern crate iron;
 extern crate libgitdit;
 extern crate mount;
-extern crate params;
 extern crate regex;
 extern crate router;
 extern crate serde;
