@@ -5,7 +5,6 @@ extern crate serde_derive;
 
 extern crate chrono;
 extern crate clap;
-extern crate docopt;
 extern crate env_logger;
 extern crate git2;
 extern crate handlebars_iron as hbs;
