@@ -36,6 +36,3 @@ walkdir         = "1"
 version  = "0.1"
 optional = true
 
-[features]
-watch = ["notify"]
-
